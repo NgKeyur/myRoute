@@ -1,0 +1,19 @@
+.input-box {
+    margin-bottom: 20px;
+    input {
+      margin-right: 10px;
+      text-transform: uppercase;
+    }
+    button {
+      padding: 4px 10px;
+    }
+  }
+  
+  .timeline-svg {
+    border-top: 1px dashed #ddd;
+    margin-top: 10px;
+    display: block;
+    overflow-x: auto;
+    max-width: 100%;
+  }
+  

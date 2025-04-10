@@ -1,0 +1,43 @@
+<div class="input-box">
+    <input [(ngModel)]="from" placeholder="From (e.g. BLR)" />
+    <input [(ngModel)]="to" placeholder="To (e.g. MAA)" />
+    <button (click)="addSegment()">Add Route</button>
+</div>
+
+<svg [attr.width]="segments.length * 160 + 50" height="160" class="timeline-svg">
+    <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#2D74DA" />
+        </marker>
+    </defs>
+
+    <ng-container *ngFor="let seg of segments; let i = index">
+        <ng-container *ngIf="seg.type !== 'repeated'">
+            <line [attr.x1]="i * 160 + 20" y1="80" [attr.x2]="(i + 1) * 160" y2="80"
+                [attr.stroke]="seg.type === 'continued' ? '#6A5ACD' : '#2D74DA'" stroke-width="2"
+                [attr.marker-end]="seg.type === 'non-continued' ? 'url(#arrowhead)' : null" />
+        </ng-container>
+
+        <path *ngIf="seg.type === 'repeated'"
+            [attr.d]="'M ' + (i * 160 + 20) + ' 80 Q ' + ((i * 160 + (i + 1) * 160) / 2) + ' 20, ' + ((i + 1) * 160) + ' 80'"
+            stroke="#F5A623" fill="transparent" stroke-width="2" />
+
+        <circle [attr.cx]="i * 160 + 20" cy="80" r="5"
+            [attr.fill]="seg.type === 'repeated' ? '#F5A623' : (seg.type === 'continued' ? '#6A5ACD' : '#2D74DA')" />
+
+        <text [attr.x]="i * 160 + 10" [attr.y]="seg.type === 'repeated' ? 30 : 110"
+            [attr.fill]="seg.type === 'repeated' ? '#F5A623' : (seg.type === 'continued' ? '#6A5ACD' : '#2D74DA')"
+            font-size="12">
+            {{ seg.from }} - {{ seg.to }}
+        </text>
+    </ng-container>
+
+    <ng-container *ngIf="segments.length">
+        <ng-container *ngIf="segments[segments.length - 1].type !== 'non-continued'">
+            <circle [attr.cx]="segments.length * 160" cy="80" r="5" fill="#ccc" />
+            <text [attr.x]="segments.length * 160 - 10" y="110" fill="#666" font-size="12">
+                {{ segments[segments.length - 1].to }}
+            </text>
+        </ng-container>
+    </ng-container>
+</svg>
